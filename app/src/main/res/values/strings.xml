@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">gatheroid-android</string>
+    <string name="app_name">gatheroid</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

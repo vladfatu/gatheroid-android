@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1071225732502",
+    "firebase_url": "https://studious-saga-144310.firebaseio.com",
+    "project_id": "studious-saga-144310",
+    "storage_bucket": "studious-saga-144310.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071225732502:android:ecc9d56d0ebfb895",
+        "android_client_info": {
+          "package_name": "com.gatheroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071225732502-ol2iu8c0t7vllioafnmdshctjetbrusc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5nZikPFNVMW23MkMWsbv3d_O32tSldNo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
