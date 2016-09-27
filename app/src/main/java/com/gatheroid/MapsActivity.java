@@ -6,6 +6,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,12 +15,24 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+    private final static String TAG = "MapsActivity";
 
     private static final int REQUEST_CODE_LOCATION = 2;
 
     private GoogleMap mMap;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private DatabaseReference myRef;
+    private MyValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +42,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        Bundle params = new Bundle();
+        params.putString("activity_name", MapsActivity.class.getSimpleName());
+        params.putString("method", "onCreate");
+        mFirebaseAnalytics.logEvent("activity", params);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("message");
+
+        myRef.setValue("Hello, World!");
+
+        valueEventListener = new MyValueEventListener();
+        myRef.addValueEventListener(valueEventListener);
+
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myRef.removeEventListener(valueEventListener);
+    }
 
     /**
      * Manipulates the map once available.
@@ -75,6 +109,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else {
                 // Permission was denied or request was cancelled
             }
+        }
+    }
+
+    private class MyValueEventListener implements ValueEventListener {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            // This method is called once with the initial value and again
+            // whenever data at this location is updated.
+            String value = dataSnapshot.getValue(String.class);
+            Toast.makeText(MapsActivity.this, "Value is: " + value, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError error) {
+            // Failed to read value
+            Log.w(TAG, "Failed to read value.", error.toException());
         }
     }
 }
