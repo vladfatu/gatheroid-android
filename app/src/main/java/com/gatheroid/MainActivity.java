@@ -27,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "before database getInstance");
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        Log.d(TAG, "after database getInstance");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -50,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "before auth getInstance");
         auth = FirebaseAuth.getInstance();
-        auth.getCurrentUser().getUid();
         Log.d(TAG, "after auth getInstance");
         if (auth.getCurrentUser() != null) {
             // already signed in
@@ -80,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onButtonClicked(View view) {
         if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(this, MapsActivity.class));
+//            startActivity(new Intent(this, MapsActivity.class));
+            startService(new Intent(this, LocationService.class));
         } else {
             Toast.makeText(MainActivity.this, "User not signed in", Toast.LENGTH_SHORT).show();
         }

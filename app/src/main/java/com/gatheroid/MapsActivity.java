@@ -171,8 +171,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         } else {
             locationListener = new MyLocationListener();
-            Intent intent = new Intent(this, LocationReceiver.class);
-            locationIntent = PendingIntent.getBroadcast(getApplicationContext(), 14872, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+            Intent intent = new Intent(this, LocationIntentService.class);
+            locationIntent = PendingIntent.getService(getApplicationContext(), 14872, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             LocationServices.FusedLocationApi.requestLocationUpdates(
                     mGoogleApiClient, mLocationRequest, locationIntent);
         }
@@ -182,7 +182,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
     }
 
     private class MyConnectionCallbacks implements GoogleApiClient.ConnectionCallbacks {

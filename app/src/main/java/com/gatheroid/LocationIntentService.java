@@ -1,7 +1,6 @@
 package com.gatheroid;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.IntentService;
 import android.content.Intent;
 import android.location.Location;
 import android.util.Log;
@@ -12,16 +11,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
- * Created by vfatu on 28.09.2016.
+ * Created by vlad on 28.09.2016.
  */
 
-public class LocationReceiver extends BroadcastReceiver {
+public class LocationIntentService extends IntentService {
 
-    private static final String TAG = "LocationReceiver";
+    public static final String TAG = "LocationIntentService";
+
+    public LocationIntentService() {
+        super(TAG);
+    }
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-
+    protected void onHandleIntent(Intent intent) {
+        Log.d(TAG, "Location update: ");
         Location location = intent.getParcelableExtra(FusedLocationProviderApi.KEY_LOCATION_CHANGED);
         if(location !=null)
         {
