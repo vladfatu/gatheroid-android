@@ -44,6 +44,8 @@ public class LocationService extends Service implements
 
     private Boolean servicesAvailable = false;
 
+    private PendingIntent locationIntent;
+
     public class LocalBinder extends Binder {
         public LocationService getServerInstance() {
             return LocationService.this;
@@ -150,12 +152,14 @@ public class LocationService extends Service implements
         this.mInProgress = false;
 
         if (this.servicesAvailable && this.mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, locationIntent);
             this.mGoogleApiClient.unregisterConnectionCallbacks(this);
             this.mGoogleApiClient.unregisterConnectionFailedListener(this);
             this.mGoogleApiClient.disconnect();
             // Destroy the current location client
             this.mGoogleApiClient = null;
         }
+
         // Display the connection status
         // Toast.makeText(this, DateFormat.getDateTimeInstance().format(new Date()) + ":
         // Disconnected. Please re-connect.", Toast.LENGTH_SHORT).show();
@@ -188,7 +192,7 @@ public class LocationService extends Service implements
             return;
         } else {
             Intent intent = new Intent(this, LocationReceiver.class);
-            PendingIntent locationIntent = PendingIntent.getBroadcast(getApplicationContext(), 14872, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            locationIntent = PendingIntent.getBroadcast(getApplicationContext(), 14872, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             LocationServices.FusedLocationApi.requestLocationUpdates(this.mGoogleApiClient,
                     mLocationRequest, locationIntent); // This is the changed line.
 //        appendLog(DateFormat.getDateTimeInstance().format(new Date()) + ": Connected", Constants.LOG_FILE);
